@@ -16,13 +16,14 @@
         <!-- Agrega esto donde desees que aparezca la puntuación -->
         <p id="puntuacion_jugador"></p>
 
-        <button onclick="hit()">{{ traducciones.pedir_carta }}</button>
+        <button onclick="hit()" id="hit-button">{{ traducciones.pedir_carta }}</button>
         <button onclick="stand()">{{ traducciones.plantarse }}</button>
 
         <h2>{{ traducciones.mano_crupier }}</h2>
         <div id="dealer-hand"></div>
-        <br><br><br>
-        <button onclick="returnToIndex()">{{ traducciones.return }}</button>
+        <br><br>
+        <button onclick="returnToIndex()">{{ traducciones.return }}</button><br><br>
+        <button id="play-again-button" onclick="startGame">Jugar Otra Vez</button>
     </div>
 
     <script>
@@ -33,6 +34,7 @@
 
         // Función para iniciar el juego
         function startGame() {
+            document.getElementById('hit-button').disabled = false;
             // Crear una baraja y barajarla
             deck = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
             shuffle(deck);
@@ -51,9 +53,18 @@
                 determineWinner();
                 return;
             } */
+
+            const playAgainButton = document.getElementById('play-again-button');
+            playAgainButton.style.display = 'none';
+        }
+
+        // Función para sacar una carta del mazo
+        function drawCard() {
+            return deck.pop();
         }
 
         // Función para pedir una carta
+
         function hit() {
             let drawnCard = drawCard();
             playerHand.push(drawnCard);
@@ -71,18 +82,30 @@
 
 
         // Función para plantarse
+        // Función para plantarse
         function stand() {
+            document.getElementById('hit-button').disabled = true;
             // El crupier toma cartas hasta llegar a 17 o más puntos
             while (calculateHandValue(dealerHand) < 17) {
                 dealerHand.push(drawCard());
             }
 
             // Mostrar todas las cartas del crupier
-            displayDealerHand(true);
+            // displayDealerHand(false); // Cambiado a false para mostrar todas las cartas
 
             // Determinar el resultado del juego
             determineWinner();
+
+            const gameDiv = document.getElementById('game');
+            const playAgainButton = document.getElementById('play-again-button');
+            playAgainButton.style.display = "block";
+            playAgainButton.onclick = startGame; // Al hacer clic, llama a startGame
+
+            // Insertar el botón después del div con id "game"
+            //gameDiv.insertAdjacentElement('afterend', playAgainButton);
+
         }
+
 
 
         // Función para determinar el ganador
@@ -90,22 +113,31 @@
             const playerValue = calculateHandValue(playerHand);
             const dealerValue = calculateHandValue(dealerHand);
 
+            // Mostrar las cartas del crupier
+            displayDealerHand(false);
+
+            const dealerScoreElement = document.createElement('p');
+            dealerScoreElement.textContent = `Puntuación Crupier: ${dealerValue}`;
+            document.getElementById('dealer-hand').appendChild(dealerScoreElement);
+
             if (playerValue > 21 || (dealerValue <= 21 && dealerValue >= playerValue)) {
                 alert("{{ traducciones.cgana }}");
-                actualizarEstadisticas('crupier'); // El crupier gana
+                // actualizarEstadisticas('crupier'); // El crupier gana
             } else if (dealerValue > 21 || dealerValue < playerValue) {
                 alert("{{ traducciones.pgana }}");
-                actualizarEstadisticas('jugador'); // El jugador gana
+                // actualizarEstadisticas('jugador'); // El jugador gana
             } else {
                 alert("{{ traducciones.empate }}");
-                actualizarEstadisticas('empate'); // Es un empate
+                // actualizarEstadisticas('empate'); // Es un empate
             }
 
-            startGame();
+
         }
 
 
-        function actualizarEstadisticas() {
+
+
+        /*function actualizarEstadisticas() {
             fetch('/obtener_estadisticas')
                 .then(function (response) {
                     return response.json();
@@ -142,7 +174,7 @@
                 .catch(function (error) {
                     console.error('Error:', error);
                 });
-        }
+        }*/
 
 
         // Función para barajar una baraja
@@ -153,10 +185,6 @@
             }
         }
 
-        // Función para sacar una carta del mazo
-        function drawCard() {
-            return deck.pop();
-        }
 
         // Función para calcular el valor de una mano
         function calculateHandValue(hand) {
