@@ -273,15 +273,28 @@ def mostrar_estadisticas():
             total_partidas = victorias + derrotas + empates
             porcentaje_victorias = (victorias / total_partidas) * 100
 
+            if porcentaje_victorias <= 20:
+                mensaje = "¡Enhorabuena por ser tan malo como mi proyecto!"
+            elif porcentaje_victorias <= 40:
+                mensaje = "¿Estás perdiendo a propósito o es que eres malísimo?"
+            elif porcentaje_victorias <= 60:
+                mensaje = "¡Mantén ese buen ritmo! --> Tienes un porcentaje de victorias tan normalito que no te mereces ni que te insulten, así que ahí tienes un mensajito genérico, a ver si espabilas"
+            elif porcentaje_victorias <= 80:
+                mensaje = "¡Buen porcentaje de victorias! ¿Es habilidad o solamente suerte?"
+            else:
+                mensaje = "¡Eres el dios del Blackjack!"
+
             estadisticas_text = f"Estadísticas del juego:\n"
             estadisticas_text += f"Victorias: {victorias}\n"
             estadisticas_text += f"Derrotas: {derrotas}\n"
             estadisticas_text += f"Empates: {empates}\n"
-            estadisticas_text += f"Porcentaje de victorias: {porcentaje_victorias:.2f}%"
+            estadisticas_text += f"Porcentaje de victorias: {porcentaje_victorias:.2f}%\n\n"
+            estadisticas_text += mensaje
 
             messagebox.showinfo("Estadísticas", estadisticas_text)
     except FileNotFoundError:
         messagebox.showinfo("Estadísticas", "No hay estadísticas disponibles.")
+
 
 def mostrar_reglas():
     reglas = """Reglas del Juego:
