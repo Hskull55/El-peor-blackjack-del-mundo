@@ -36,5 +36,17 @@
     "pgana": "¡Tú ganas!",
     "empate": "¡Empate!",
     "perdiste": "Te has pasado de 21, has perdido... La última carta que sacaste fue:",
-    "puntos":"Puntos"
+    "puntos": "Puntos",
+    "otra": "Jugar otra partida",
+    "crupier": "Puntos del crupier",
+    "como": "Cómo jugar",
+    "uno": "1. El objetivo del juego es obtener una mano con un valor lo más cercano posible a 21 sin pasarse.",
+    "dos": "2. Cada carta tiene un valor en puntos: As (1 u 11), Dos (2), Tres (3), ... Rey (10).",
+    "tres": "3. Se reparten dos cartas al jugador y al crupier al comienzo.",
+    "cuatro": "4. El jugador puede pedir cartas adicionales ('Pedir Carta') o plantarse ('Plantarse').",
+    "cinco": "5. El crupier también puede pedir cartas adicionales hasta alcanzar 17 o más.",
+    "seis": "6. Si el jugador supera 21 puntos, pierde automáticamente. Si el crupier supera 21, el jugador gana.",
+    "siete": "7. El jugador gana si tiene una puntuación mayor que el crupier sin pasar de 21.",
+    "ocho": "8. En caso de empate, se declara un empate.",
+    "nueve": "9. ¡Disfruta del juego de Blackjack!"
 }

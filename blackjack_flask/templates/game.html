@@ -23,7 +23,7 @@
         <div id="dealer-hand"></div>
         <br><br>
         <button onclick="returnToIndex()">{{ traducciones.return }}</button><br><br>
-        <button id="play-again-button" onclick="startGame">Jugar Otra Vez</button>
+        <button id="play-again-button" onclick="startGame">{{ traducciones.otra }}</button>
     </div>
 
     <script>
@@ -117,7 +117,7 @@
             displayDealerHand(false);
 
             const dealerScoreElement = document.createElement('p');
-            dealerScoreElement.textContent = `Puntuación Crupier: ${dealerValue}`;
+            dealerScoreElement.textContent = `{{ traducciones.crupier }}: ${dealerValue}`;
             document.getElementById('dealer-hand').appendChild(dealerScoreElement);
 
             if (playerValue > 21 || (dealerValue <= 21 && dealerValue >= playerValue)) {

@@ -49,6 +49,13 @@ def stats():
     traducciones = cargar_traducciones(idioma)
     return render_template('stats.html', traducciones=traducciones)
 
+@app.route('/como_jugar')
+def como_jugar():
+    idioma = session.get('idioma', 'es')  # Por defecto, usa español
+    traducciones = cargar_traducciones(idioma)
+    return render_template('como_jugar.html', traducciones=traducciones)
+
+
 @app.route('/cambiar_idioma/<idioma>')
 def cambiar_idioma(idioma):
     session['idioma'] = idioma
