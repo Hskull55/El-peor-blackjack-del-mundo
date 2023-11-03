@@ -118,6 +118,8 @@ def iniciar_juego():
     boton_volver_al_menu = tk.Button(ventana, text="Volver al Menú", command=regresar_al_menu, bg=color_fondo)
     boton_volver_al_menu.pack()
 
+    cambiar_color_botones()
+
 def pedir_carta():
     global baraja, jugador, ultima_carta
 
@@ -247,13 +249,12 @@ def cambiar_color_fondo(color):
     global color_fondo
     color_fondo = color
     ventana.configure(bg=color)
-    for widget in ventana.winfo_children():
-        widget.configure(bg=color)
 
-    # Actualizar color de fondo de los botones y etiquetas
+    # Actualizar color de fondo de los widgets, excepto los botones
     for widget in ventana.winfo_children():
-        if isinstance(widget, tk.Button) or isinstance(widget, tk.Label):
+        if not isinstance(widget, tk.Button):
             widget.configure(bg=color)
+
 
 # Nueva función para elegir color
 def elegir_color():
@@ -295,6 +296,12 @@ def mostrar_reglas():
     9. ¡Disfruta del juego de Blackjack!
     """
     messagebox.showinfo("Reglas del Juego", reglas)
+
+def cambiar_color_botones():
+    for widget in ventana.winfo_children():
+        if isinstance(widget, tk.Button):
+            widget.configure(bg="#F0F0F0")
+
 
 
 # Crear ventana principal
