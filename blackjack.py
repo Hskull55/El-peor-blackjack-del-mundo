@@ -162,6 +162,11 @@ def plantarse():
 
 def mostrar_resultado():
     global juego_en_curso
+
+    if not os.path.isfile('stats.txt'):
+        with open('stats.txt', 'w') as stats_file:
+            stats_file.write('Victorias: 0\nDerrotas: 0\nEmpates: 0')
+            
     # Comparar puntuaciones
     if dealer.valor_mano() > 21 or jugador.valor_mano() > dealer.valor_mano():
         messagebox.showinfo("Resultado", "¡Has ganado!")
@@ -263,37 +268,43 @@ def elegir_color():
         cambiar_color_fondo(color[1])
 
 def mostrar_estadisticas():
-    try:
-        with open('stats.txt', 'r') as stats_file:
-            stats = stats_file.readlines()
-            victorias = int(stats[0].split(': ')[1])
-            derrotas = int(stats[1].split(': ')[1])
-            empates = int(stats[2].split(': ')[1])
-
-            total_partidas = victorias + derrotas + empates
-            porcentaje_victorias = (victorias / total_partidas) * 100
-
-            if porcentaje_victorias <= 20:
-                mensaje = "¡Enhorabuena por ser tan malo como mi proyecto!"
-            elif porcentaje_victorias <= 40:
-                mensaje = "¿Estás perdiendo a propósito o es que eres malísimo?"
-            elif porcentaje_victorias <= 60:
-                mensaje = "¡Mantén ese buen ritmo! --> Tienes un porcentaje de victorias tan normalito que no te mereces ni que te insulten, así que ahí tienes un mensajito genérico, a ver si espabilas"
-            elif porcentaje_victorias <= 80:
-                mensaje = "¡Buen porcentaje de victorias! ¿Es habilidad o solamente suerte?"
-            else:
-                mensaje = "¡Eres el dios del Blackjack!"
-
-            estadisticas_text = f"Estadísticas del juego:\n"
-            estadisticas_text += f"Victorias: {victorias}\n"
-            estadisticas_text += f"Derrotas: {derrotas}\n"
-            estadisticas_text += f"Empates: {empates}\n"
-            estadisticas_text += f"Porcentaje de victorias: {porcentaje_victorias:.2f}%\n\n"
-            estadisticas_text += mensaje
-
-            messagebox.showinfo("Estadísticas", estadisticas_text)
-    except FileNotFoundError:
+    if not os.path.isfile('stats.txt'):
         messagebox.showinfo("Estadísticas", "No hay estadísticas disponibles.")
+    else:
+        try:
+            with open('stats.txt', 'r') as stats_file:
+                stats = stats_file.readlines()
+                victorias = int(stats[0].split(': ')[1])
+                derrotas = int(stats[1].split(': ')[1])
+                empates = int(stats[2].split(': ')[1])
+
+                total_partidas = victorias + derrotas + empates
+                porcentaje_victorias = (victorias / total_partidas) * 100
+
+                if porcentaje_victorias == 0:
+                    mensaje = "JAJAJAJAJAJAJAJAJAJAJAJAJAJA"
+                elif porcentaje_victorias <= 20:
+                    mensaje = "¡Enhorabuena por ser tan malo como mi proyecto!"
+                elif porcentaje_victorias <= 40:
+                    mensaje = "¿Estás perdiendo a propósito o es que eres malísimo?"
+                elif porcentaje_victorias <= 60:
+                    mensaje = "¡Mantén ese buen ritmo! --> Tienes un porcentaje de victorias tan normalito que no te mereces ni que te insulten, así que ahí tienes un mensajito genérico, a ver si espabilas"
+                elif porcentaje_victorias <= 80:
+                    mensaje = "¡Buen porcentaje de victorias! ¿Es habilidad o solamente suerte?"
+                else:
+                    mensaje = "¡Eres el dios del Blackjack!"
+
+                estadisticas_text = f"Estadísticas del juego:\n"
+                estadisticas_text += f"Victorias: {victorias}\n"
+                estadisticas_text += f"Derrotas: {derrotas}\n"
+                estadisticas_text += f"Empates: {empates}\n"
+                estadisticas_text += f"Porcentaje de victorias: {porcentaje_victorias:.2f}%\n\n"
+                estadisticas_text += mensaje
+
+                messagebox.showinfo("Estadísticas", estadisticas_text)
+        except FileNotFoundError:
+            messagebox.showinfo("Estadísticas", "No hay estadísticas disponibles.")
+
 
 
 def mostrar_reglas():
