@@ -3,7 +3,7 @@
 
 <head>
     <title id="ajustes">{{ traducciones.ajustes }}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -11,7 +11,7 @@
 
     <h2 id="idioma">{{ traducciones.idioma }}</h2>
     <label for="language" id="idioma_select">{{ traducciones.idioma_select }}</label>
-    <select id="language" onchange="changeLanguage()" >
+    <select id="language" onchange="changeLanguage()">
         <option value="es">{{ traducciones.es }}</option>
         <option value="en">{{ traducciones.en }}</option>
     </select>
@@ -31,7 +31,9 @@
     <script>
         // Función para cambiar el idioma
         function changeLanguage() {
+
             const selectedLanguage = document.getElementById('language').value;
+            localStorage.setItem('selectedLanguage', selectedLanguage);
             console.log(selectedLanguage)
             fetch('/cambiar_idioma/' + selectedLanguage, {
                 method: 'GET'
@@ -75,6 +77,11 @@
             const savedColor = localStorage.getItem('backgroundColor');
             if (savedColor) {
                 document.body.style.backgroundColor = savedColor;
+            }
+
+            const selectedLanguage = localStorage.getItem('selectedLanguage');
+            if (selectedLanguage) {
+                document.getElementById('language').value = selectedLanguage;
             }
         });
 
