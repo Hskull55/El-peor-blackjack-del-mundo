@@ -2,21 +2,24 @@
 <html>
 
 <head>
-    <title>Estadísticas - Blackjack</title>
+    <title>{{ traducciones.titulo_estadisticas }} - Blackjack</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
 </head>
 
 <body>
     <h1>{{ traducciones.titulo_estadisticas }}</h1>
 
-    <div id="stats">
+    <img src="/static/so_sorry.jpg" alt="Una imagen que representa la ineptitud y falta de compromiso de quien la incluyó en la página" ><br><br>
+    <!-- <div id="stats">
         <p>Victorias: <span id="victorias"></span></p>
         <p>Derrotas: <span id="derrotas"></span></p>
         <p>Empates: <span id="empates"></span></p>        
-    </div>
+    </div> -->
 
     <button onclick="returnToIndex()">{{ traducciones.volver_inicio }}</button>
 
     <script>
+        /* 
         document.addEventListener('DOMContentLoaded', function () {
             fetch('/obtener_estadisticas', {
                 method: 'GET'
@@ -32,13 +35,15 @@
                 .catch(function (error) {
                     console.error('Error:', error);
                 });
-        });
+        }); 
+        */
 
         // Función para redirigir a index.html
         function returnToIndex() {
             window.location.href = '/';
         }
 
+        /*
         document.addEventListener('DOMContentLoaded', function () {
             // Obtenemos las estadísticas desde Flask
             fetch('/obtener_estadisticas')
@@ -54,7 +59,8 @@
                 .catch(function (error) {
                     console.error('Error:', error);
                 });
-        });
+        }); 
+        */
 
         document.addEventListener('DOMContentLoaded', function () {
             const savedColor = localStorage.getItem('backgroundColor');
