@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <title>{{ traducciones.como }} - Blackjack</title>
+</head>
+
+<body>
+    <table id="reglasTable" class="display">
+        <tr>
+            <td><strong>{{ traducciones.como }}</strong></td>
+        <tr>
+            <td>{{ traducciones.uno }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.dos }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.tres }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.cuatro }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.cinco }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.seis}}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.siete }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.ocho }}</td>
+        </tr>
+        <tr>
+            <td>{{ traducciones.nueve }}</td>
+        </tr>
+        </tr>
+    </table>
+
+    <br><button onclick="returnToIndex()">{{ traducciones.return }}</button>
+
+    <script>
+        $(document).ready(function () {
+            $('#reglasTable').DataTable();
+        });
+
+        $(document).ready(function () {
+            $('table').css({
+                'border-collapse': 'collapse',
+                'border': '3px solid #000000'
+            });
+
+            $('th, td').css({
+                'border': '1px solid #000000',
+                'padding': '8px'
+            });
+        });
+
+        $(document).ready(function () {
+            $('th, td').css({
+                'background-color': '#FAFAFA',
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedColor = localStorage.getItem('backgroundColor');
+            if (savedColor) {
+                document.body.style.backgroundColor = savedColor;
+            }
+        });
+
+        function returnToIndex() {
+            window.location.href = '/';
+        }
+    </script>
+
+
+
+</body>
+
+</html>
