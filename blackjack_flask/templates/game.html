@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Blackjack - Juego</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+</head>
+
+<body>
+    <h1>Blackjack</h1>
+
+    <div id="game">
+        <h2>{{ traducciones.mano_jugador }}</h2>
+
+        <div id="player-hand"></div>
+        <!-- Agrega esto donde desees que aparezca la puntuación -->
+        <p id="puntuacion_jugador"></p>
+
+        <button onclick="hit()">{{ traducciones.pedir_carta }}</button>
+        <button onclick="stand()">{{ traducciones.plantarse }}</button>
+
+        <h2>{{ traducciones.mano_crupier }}</h2>
+        <div id="dealer-hand"></div>
+        <br><br><br>
+        <button onclick="returnToIndex()">{{ traducciones.return }}</button>
+    </div>
+
+    <script>
+        // Variables para el juego
+        let playerHand = [];
+        let dealerHand = [];
+        let deck = [];
+
+        // Función para iniciar el juego
+        function startGame() {
+            // Crear una baraja y barajarla
+            deck = ['A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K'];
+            shuffle(deck);
+
+            // Repartir dos cartas al jugador y al crupier
+            playerHand = [drawCard(), drawCard()];
+            dealerHand = [drawCard(), drawCard()];
+
+            // Mostrar las cartas del jugador
+            displayPlayerHand();
+            // Mostrar una de las cartas del crupier y la otra boca abajo
+            displayDealerHand(true);
+
+            // Verificar si alguno de los jugadores tiene Blackjack
+            if (checkBlackjack(playerHand) || checkBlackjack(dealerHand)) {
+                determineWinner();
+                return;
+            }
+        }
+
+        // Función para pedir una carta
+        function hit() {
+            let drawnCard = drawCard();
+            playerHand.push(drawnCard);
+            displayPlayerHand();
+
+            // Comprobar si el jugador se pasó de 21 (bust)
+            if (calculateHandValue(playerHand) > 21) {
+                alert(`{{ traducciones.perdiste }} ${drawnCard}`);
+                startGame();
+            } else if (calculateHandValue(playerHand) === 21) {
+                // Si la puntuación del jugador es 21, se planta automáticamente
+                stand();
+            }
+        }
+
+
+        // Función para plantarse
+        function stand() {
+            // El crupier toma cartas hasta llegar a 17 o más puntos
+            while (calculateHandValue(dealerHand) < 17) {
+                dealerHand.push(drawCard());
+            }
+
+            // Mostrar todas las cartas del crupier
+            displayDealerHand(true);
+
+            // Determinar el resultado del juego
+            determineWinner();
+        }
+
+
+        // Función para determinar el ganador
+        function determineWinner() {
+            const playerValue = calculateHandValue(playerHand);
+            const dealerValue = calculateHandValue(dealerHand);
+
+            if (playerValue > 21 || (dealerValue <= 21 && dealerValue >= playerValue)) {
+                alert("{{ traducciones.cgana }}");
+                actualizarEstadisticas('crupier'); // El crupier gana
+            } else if (dealerValue > 21 || dealerValue < playerValue) {
+                alert("{{ traducciones.pgana }}");
+                actualizarEstadisticas('jugador'); // El jugador gana
+            } else {
+                alert("{{ traducciones.empate }}");
+                actualizarEstadisticas('empate'); // Es un empate
+            }
+
+            startGame();
+        }
+
+
+        function actualizarEstadisticas() {
+            fetch('/obtener_estadisticas')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    document.getElementById('victorias').textContent = data.gamesWon;
+                    document.getElementById('derrotas').textContent = data.gamesLost;
+                    document.getElementById('empates').textContent = data.gamesTied;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+        function updateStats() {
+            fetch('/obtener_estadisticas', {
+                method: 'GET'
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        // Actualizar el HTML con las nuevas estadísticas
+                        document.getElementById('victorias').textContent = data.victorias;
+                        document.getElementById('derrotas').textContent = data.derrotas;
+                        document.getElementById('empates').textContent = data.empates;
+                    } else {
+                        alert('Error al obtener las estadísticas');
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        // Función para barajar una baraja
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Función para sacar una carta del mazo
+        function drawCard() {
+            return deck.pop();
+        }
+
+        // Función para calcular el valor de una mano
+        function calculateHandValue(hand) {
+            let value = 0;
+            let numAces = 0;
+
+            for (let card of hand) {
+                if (card === 'A') {
+                    numAces++;
+                    value += 11;
+                } else if (card === 'K' || card === 'Q' || card === 'J') {
+                    value += 10;
+                } else {
+                    value += card;
+                }
+            }
+
+            // Si hay ases y la mano se pasa de 21, convierte los ases en 1s
+            while (numAces > 0 && value > 21) {
+                value -= 10;
+                numAces--;
+            }
+
+            return value;
+        }
+
+        // Función para mostrar la mano del jugador
+        function displayPlayerHand() {
+            const playerHandElement = document.getElementById('player-hand');
+            playerHandElement.innerHTML = '';
+
+            for (let card of playerHand) {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.textContent = card;
+                playerHandElement.appendChild(cardElement);
+            }
+
+            const playerValue = calculateHandValue(playerHand);
+            document.getElementById('puntuacion_jugador').textContent = `{{ traducciones.puntos }}: ${playerValue}`;
+        }
+
+        function displayDealerHand(hideSecondCard) {
+            const dealerHandElement = document.getElementById('dealer-hand');
+            dealerHandElement.innerHTML = '';
+
+            for (let i = 0; i < dealerHand.length; i++) {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                if (i === 1 && hideSecondCard) {
+                    cardElement.textContent = 'X'; // Carta boca abajo
+                } else {
+                    cardElement.textContent = dealerHand[i];
+                }
+                dealerHandElement.appendChild(cardElement);
+            }
+        }
+
+
+        // Función para verificar si hay Blackjack
+        function checkBlackjack(hand) {
+            return (hand.length === 2 && ((hand.includes('A') && (hand.includes(10) || hand.includes('J') || hand.includes('Q') || hand.includes('K')))));
+        }
+
+        function returnToIndex() {
+            window.location.href = '/';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedColor = localStorage.getItem('backgroundColor');
+            if (savedColor) {
+                document.body.style.backgroundColor = savedColor;
+            }
+        });
+
+        // Inicia el juego al cargar la página
+        startGame();
+    </script>
+</body>
+
+</html>

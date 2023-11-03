@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Estadísticas - Blackjack</title>
+</head>
+
+<body>
+    <h1>{{ traducciones.titulo_estadisticas }}</h1>
+
+    <div id="stats">
+        <p>Victorias: <span id="victorias"></span></p>
+        <p>Derrotas: <span id="derrotas"></span></p>
+        <p>Empates: <span id="empates"></span></p>        
+    </div>
+
+    <button onclick="returnToIndex()">{{ traducciones.volver_inicio }}</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/obtener_estadisticas', {
+                method: 'GET'
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    document.getElementById('gamesWon').textContent = data.gamesWon;
+                    document.getElementById('gamesLost').textContent = data.gamesLost;
+                    document.getElementById('gamesTied').textContent = data.gamesTied;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Función para redirigir a index.html
+        function returnToIndex() {
+            window.location.href = '/';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtenemos las estadísticas desde Flask
+            fetch('/obtener_estadisticas')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    // Mostramos las estadísticas en los elementos correspondientes
+                    document.getElementById('victorias').textContent = data.gamesWon;
+                    document.getElementById('derrotas').textContent = data.gamesLost;
+                    document.getElementById('empates').textContent = data.gamesTied;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedColor = localStorage.getItem('backgroundColor');
+            if (savedColor) {
+                document.body.style.backgroundColor = savedColor;
+            }
+        });
+    </script>
+</body>
+
+</html>
