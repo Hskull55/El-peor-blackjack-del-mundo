@@ -9,10 +9,12 @@ En este repositorio encontrarás las dos peores formas de jugar al Blackjack jam
 - Sistema de estadísticas
 - Sistema de apuestas
 - Mejoras de interfaz de usuario
+- Sistema de imágenes para mostrar las cartas
 - Mejor sistema para revelar las cartas
 - Dificultad personalizable
 
-### **Versión Tkinder**
+### **Versión Tkinter**
 
 - Sistema de apuestas utilizando ficheros
+- Sistema de imágenes para mostrar las cartas
 - Selección de idioma
